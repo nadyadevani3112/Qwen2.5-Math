@@ -3,7 +3,7 @@ https://github.com/allenai/open-instruct
 """
 import torch
 import tqdm
-from transformers import StoppingCriteria, StoppingCriteriaList
+from transformers import StoppingCriteria, StoppingCriteriaList, BitsAndBytesConfig
 
 
 class KeywordsStoppingCriteria(StoppingCriteria):
@@ -187,11 +187,23 @@ def load_hf_lm_and_tokenizer(
     else:
         # return "", tokenizer
         # defaul load in float16
-        model = AutoModelForCausalLM.from_pretrained(model_name_or_path,
-                                                     torch_dtype=torch.float16,
-                                                     device_map=device_map,
-                                                     trust_remote_code=True,
-                                                     use_safetensors=use_safetensors)
+        # model = AutoModelForCausalLM.from_pretrained(model_name_or_path,
+        #                                              torch_dtype=torch.float16,
+        #                                              device_map=device_map,
+        #                                              trust_remote_code=True,
+        #                                              use_safetensors=use_safetensors)
+        quant_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_use_double_quant=True,
+            bnb_4bit_compute_dtype=torch.bfloat16,
+            bnb_4bit_quant_type="nf4")
+
+        model = AutoModelForCausalLM.from_pretrained(
+            model_name_or_path,
+            quantization_config=quant_config,
+            device_map=device_map,
+            trust_remote_code=True
+        )
         if torch.cuda.is_available():
             model = model.cuda()
         if load_in_half:
