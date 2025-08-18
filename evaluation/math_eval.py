@@ -123,7 +123,8 @@ def setup(args):
     else:
         llm, tokenizer = load_hf_lm_and_tokenizer(
             model_name_or_path=args.model_name_or_path,
-            load_in_half=True,
+            # load_in_half=True,
+            load_in_half=False,
             use_fast_tokenizer=True,
             use_safetensors=args.use_safetensors,
         )
