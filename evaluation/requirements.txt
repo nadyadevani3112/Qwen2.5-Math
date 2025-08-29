@@ -1,19 +1,26 @@
-# common
-# vllm
-tqdm
+# Torch stack (CUDA 12.4 build, matching versions)
+torch==2.5.1+cu124
+torchvision==0.20.1+cu124
+torchaudio==2.5.1+cu124
+--extra-index-url https://download.pytorch.org/whl/cu124
+
+# HuggingFace ecosystem
+transformers==4.51.3
+accelerate==1.3.0
+peft
 datasets
-torch
-transformers
+tqdm
 python_dateutil
-flash_attn
+# flash_attn
 
 # math_eval
-sympy==1.12
-antlr4-python3-runtime==4.11.1 # ! The version needs to be compatible with sympy.
+sympy==1.13.1
+antlr4-python3-runtime==4.9.3
 word2number
 Pebble
 timeout-decorator
 
-# additional, added to resolve errors
+# additional
 latex2sympy2
 bitsandbytes==0.46.0
+requests
